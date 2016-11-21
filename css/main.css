@@ -1,0 +1,77 @@
+html,
+body {
+	font-family: Arial, sans-serif;
+    height: 100%;
+	margin: 0;
+	padding: 0;
+	
+}
+
+#searchcontains{
+	height: 100%;
+	position: absolute;
+	width: 300px;
+	padding-top: 30px;
+	padding-left: 30px;
+	background-color: rgba(256,256,256,.9);
+	overflow: auto;
+	z-index: 3;
+}
+
+#search-group{
+	margin-bottom: 20px;
+	width: 250px;
+}
+
+#map {
+	width: 100%;
+    height: 100%;
+	z-index: 1;
+	position: absolute;
+	margin: 0;
+}
+
+#list-place{
+	margin-left: -15px;
+	width: 250px;
+}
+
+#separate-line{
+	margin-left: -35px;
+	width: 290px;
+}
+
+#reset-button{
+	float: right;
+	margin-bottom: 20px;
+}
+
+#NY-time{
+	font-family: 'Architects Daughter', cursive;
+	font-size: 15px;
+}
+
+#news-title{
+	font-size: 20px;
+	
+}
+.news-articles{
+	margin-left: -20px;
+}
+
+@media screen and (max-width: 700px){
+	#searchcontains{
+		width: 200px;
+		padding-top: 10px;
+		padding-left: 10px;
+	}
+	
+	#search-group{
+		margin-bottom: 20px;
+		width: 150px;
+	}
+	#list-place{
+		margin-left: -15px;
+		width: 150px;
+	}
+}
