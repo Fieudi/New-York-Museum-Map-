@@ -17,14 +17,15 @@
 		</div>
 		
 		<div class="list-group" id="list-place" data-bind="foreach: markerLocation">
-			<div data-bind="visible: visible">
-				<button type="button" class="list-group-item" data-bind="text: $data.title"></button>
-			</div>
+			<button type="button" class="list-group-item list" data-bind="text: $data.title, visible: visible, attr:{id: $data.id}"></button>
 		</div>
 		<button class="btn btn-info" id="reset-button" type="button" >reset map</button>
 		<hr id="separate-line">
-		<div id="NY-time" class="list-group">
-			<div id="news-title"><strong></strong></div>
+		<div id="NY-time" class="list-group" >
+			<div id="news-title"><strong>latest News of Museum</strong></div>
+			<div data-bind="foreach: nytimesNews">
+				<a href="" class="list-group-item news-articles" data-bind="text:$data.headline, attr:{href: $data.newsURL}"></a>
+			</div>
 		</div>
 	</div>
 	<!--map area-->
@@ -35,7 +36,7 @@
 	<script src="javascript/jquery-3.1.0.min.js"></script>
 	<script src="javascript/apps.js"></script>
 	<script async defer
-        src="https://maps.googleapis.com/maps/api/js?Libraries=places,geometry&key=AIzaSyDodOjM1OH3YdAKiUcKdyft1_r6yOSorRI&v=3&callback=initialMap" type="text/javascript" >
+        src="https://maps.googleapis.com/maps/api/js?Libraries=places,geometry&key=AIzaSyDodOjM1OH3YdAKiUcKdyft1_r6yOSorRI&v=3&callback=initialMap" type="text/javascript" onerror="mapError">
     </script>
 </body>
 </html>

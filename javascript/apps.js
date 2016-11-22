@@ -1,6 +1,6 @@
 var locations = [
 	{
-		"place_id" : 0, 
+		"place_id" : "list0", 
 		"title" : "The Metropolitan Museum of Art",
 		"address" : "1000 5th Ave, New York, NY 10028",
 		"lat" : 40.7792377,
@@ -10,7 +10,7 @@ var locations = [
 		"visible": ko.observable(true)
 	},
 	{
-		"place_id" : 1,
+		"place_id" : "list1",
 		"title" : "The Museum of Modern Art",
 		"address" : "11 W 53rd St, New York, NY 10019",
 		"lat" : 40.761417,
@@ -20,7 +20,7 @@ var locations = [
 		"visible": ko.observable(true)
 	},
 	{
-		"place_id" : 2,
+		"place_id" : "list2",
 		"title" : "American Museum of Natural History",
 		"address" : "Central Park West & 79th St, New York, NY 10024",
 		"lat" : 40.7820454,
@@ -30,7 +30,7 @@ var locations = [
 		"visible": ko.observable(true)
 	},
 	{
-		"place_id" : 3,
+		"place_id" : "list3",
 		"title" : "Whitney Museum of American Art",
 		"address" : "99 Gansevoort St, New York, NY 10014",
 		"lat" : 40.7396091,
@@ -40,7 +40,7 @@ var locations = [
 		"visible": ko.observable(true)
 	},
 	{
-		"place_id" : 4,
+		"place_id" : "list4",
 		"title" : "Rubin Museum of Art",
 		"address" : "150 W 17th St, New York, NY 10011",
 		"lat" : 40.740088,
@@ -50,7 +50,7 @@ var locations = [
 		"visible": ko.observable(true)
 	},
 	{
-		"place_id" : 5,
+		"place_id" : "list5",
 		"title" : "Museum of the City of New York",
 		"address" : "1220 5th Ave & 103rd St, New York, NY 10029",
 		"lat" : 40.7923537,
@@ -59,11 +59,12 @@ var locations = [
 		"status" : true,
 		"visible": ko.observable(true)
 	}
-]
+];
 
 var map;
 var streetImage;
 var streetViewUrl = "http://maps.googleapis.com/maps/api/streetview?size=180x110&location=";
+
 
 function initialMap(){
 	//create a style array for map 
@@ -94,12 +95,14 @@ function initialMap(){
 	
 	intialMarker();
 	setMarkers();	
-};
+}
 
 
 //initial marker in maps
 function intialMarker(){
 	var largeInfowindow = new google.maps.InfoWindow();
+	var defaultIcon = markerIcon('6699ff');
+	var clickIcon = markerIcon('ffccff');
 	//create marker in locations, add listener in marker
 	for(var i = 0; i < locations.length; i ++){
 		var title = locations[i].title;
@@ -113,7 +116,7 @@ function intialMarker(){
 			position : new google.maps.LatLng(locations[i].lat, locations[i].lng),
 			title : title,
 			animation: google.maps.Animation.DROP,
-			id : i
+			icon: defaultIcon
 		});	
 
 		locations[i].marker.addListener('click', (function(infoContent){
@@ -131,15 +134,35 @@ function intialMarker(){
 			return function(){
 				resetMap();
 				largeInfowindow.close(map, markerr);
-			}
+			};
 		})(locations[i].marker));
+		
+		//when marker clicked, its color will change  
+		locations[i].marker.addListener('click', function(){
+			this.setIcon(clickIcon);
+		});
+		
+		//event listener to list click
+		var clickList = $('#list' + i);
+        clickList.on('click', (function(markerd, contents) {
+          return function() {
+			console.log(markerd);
+			//locations[x].status = true;
+			populateInfoWindows(markerd, contents, largeInfowindow);
+			markerd.setIcon(clickIcon);
+			map.setCenter(markerd.getPosition());
+            map.setZoom(16);
+          }; 
+        })(locations[i].marker, content));
 	}
 }
 
 var setMarkers = function(){
+	var defaultIcon = markerIcon('6699ff');
 	for(var j = 0; j < locations.length; j ++){
 		if(locations[j].status === true){
 			locations[j].marker.setMap(map);
+			locations[j].marker.setIcon(defaultIcon);
 		}else{
 			locations[j].marker.setMap(null);
 		}
@@ -156,12 +179,22 @@ function populateInfoWindows(marker, content, largerInfowindow){
             largerInfowindow.marker = null;
           });
 	}
-};
-
+}
+//set marker color
+function markerIcon(color){
+	 var markerImage = new google.maps.MarkerImage(
+		 'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ color +
+         '|40|_|%E2%80%A2',
+	new google.maps.Size(21, 34),
+    new google.maps.Point(0, 0),
+    new google.maps.Point(10, 34),
+    new google.maps.Size(21,34));
+    return markerImage; 
+}
 //when the map has laod error, start function
-/*function mapError(){
+function mapError(){
 	alert("the map can't be load");
-}*/
+}
 
 //reset button function
 var resetMap = function(){
@@ -172,17 +205,52 @@ var resetMap = function(){
 	}
 	
 	setMarkers();
-}
+};
 
-//view Model set for filter and list
+
+//define the locations type in knockout
+var locationDetail = function(data){
+	this.title = ko.observable(data.title);
+	this.address = ko.observable(data.address);
+	this.lat = ko.observable(data.lat);
+	this.lng = ko.observable(data.lng);
+	this.url = ko.observable(data.url);
+	this.id = ko.observable(data.place_id);
+	this.status = ko.observable(data.status);
+	this.visible = data.visible;
+	this.marker = data.marker;
+};
+//define the nytimes in knouckout
+var newyorkTimes = function(data){
+	this.newsURL = ko.observable(data.web_url);
+	this.headline = ko.observable(data.headline.main);
+};
+
+//view Model set for filter, list and New York times
 var ViewModel = function(){
 	var self = this;
-	
+
 	this.searchInput = ko.observable('');
+	
 	this.markerLocation = ko.observableArray([]);
 	locations.forEach(function(location){
 		self.markerLocation.push(new locationDetail(location));
 	});
+	
+	// set ny times api
+	this.nytimesNews = ko.observableArray([]);
+	this.loadNews = ko.dependentObservable(function(){
+		var NYurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=";
+		var NYurltemp = NYurl + "New York Museum" + "&sort=newest&api-key=7957786d5eb847f59f059f812fca919a";
+		$.getJSON(NYurltemp, function(data){
+			var articles;
+			articles = data.response.docs;
+			articles.forEach(function(article){
+			self.nytimesNews.push(new newyorkTimes(article));
+			});
+		});	
+	});
+	
 	
 	this.locations = ko.dependentObservable(function(){
 		var search = self.searchInput().toLowerCase();
@@ -199,44 +267,12 @@ var ViewModel = function(){
 		});
 		
 	});
-}
+};
 
 $("#search").keyup(function() {
 	setMarkers();
 });
 
 
-//define the locations type in knockout
-var locationDetail = function(data){
-	this.title = ko.observable(data.title);
-	this.address = ko.observable(data.address);
-	this.lat = ko.observable(data.lat);
-	this.lng = ko.observable(data.lng);
-	this.url = ko.observable(data.url);
-	this.id = ko.observable(data.place_id);
-	this.status = ko.observable(data.status);
-	this.visible = data.visible;
-	this.marker = data.marker;
-} 
-
-//set NY-time news
-function loadNews(){
-	var NYurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=";
-	var NYurltemp = NYurl + "New York Museum" + "&sort=newest&api-key=7957786d5eb847f59f059f812fca919a";
-	
-	$.getJSON(NYurltemp, function(data){
-		console.log(data);
-		$('#news-title').text("latest News of Museum");
-		articles = data.response.docs;
-		for(var i = 0; i < articles.length; i ++){
-			$('#NY-time').append('<a href="' + articles[i].web_url + '" class="list-group-item news-articles">' + articles[i].headline.main + '</a>');
-		}
-		
-	}).fail(function(){
-		$('#news-title').text("the New York times Page can't be found!");
-	})
-}
-
 ko.applyBindings(new ViewModel());
-loadNews();
 
