@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+	<meta name=viewport content="width=device-width, initial-scale=1">
     <title>neighborhood map</title>
 	<link href="css/main.css" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -12,18 +13,18 @@
     <div id="searchcontains" class="container-fluid">
 		<div id="search-bar" class="row">
 			<div id="search-group" class="input-group">
-				<input id="search" class="form-control" data-bind="textInput: searchInput, valueUpdate: 'keydown'"  placeholder="search here" type="text"></input>
+				<input id="search" class="form-control" data-bind="textInput: searchInput, valueUpdate: 'keydown', event: {'keyup': setLocation}"  placeholder="search here" type="text">
 			</div>
 		</div>
 		
 		<div class="list-group" id="list-place" data-bind="foreach: markerLocation">
-			<button type="button" class="list-group-item list" data-bind="text: $data.title, visible: visible, attr:{id: $data.id}"></button>
+			<button type="button" class="list-group-item list" data-bind="text: $data.title, visible: visible, attr:{id: $data.id}, click: $parent.displayMarker"></button>
 		</div>
-		<button class="btn btn-info" id="reset-button" type="button" >reset map</button>
+		<button class="btn btn-info" id="reset-button" type="button" data-bind="click: resetNews">reset map</button>
 		<hr id="separate-line">
 		<div id="NY-time" class="list-group" >
-			<div id="news-title"><strong>latest News of Museum</strong></div>
-			<div data-bind="foreach: nytimesNews">
+			<div id="news-title"  data-bind="text: newsTitle"></div>
+			<div id="newsList" data-bind="foreach: nytimesNews">
 				<a href="" class="list-group-item news-articles" data-bind="text:$data.headline, attr:{href: $data.newsURL}"></a>
 			</div>
 		</div>
@@ -31,12 +32,12 @@
 	<!--map area-->
 	<div id="map">
 	</div>
-
+	
     <script src="javascript/lib/knockout-3.2.0.js"></script>
 	<script src="javascript/jquery-3.1.0.min.js"></script>
 	<script src="javascript/apps.js"></script>
 	<script async defer
-        src="https://maps.googleapis.com/maps/api/js?Libraries=places,geometry&key=AIzaSyDodOjM1OH3YdAKiUcKdyft1_r6yOSorRI&v=3&callback=initialMap" type="text/javascript" onerror="mapError">
+        src="https://maps.googleapis.com/maps/api/js?Libraries=places,geometry&key=AIzaSyDodOjM1OH3YdAKiUcKdyft1_r6yOSorRI&v=3&callback=initialMap" type="text/javascript" onerror="myError()">
     </script>
 </body>
 </html>

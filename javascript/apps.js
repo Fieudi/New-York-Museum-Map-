@@ -1,3 +1,5 @@
+'use strict';
+
 var locations = [
 	{
 		"place_id" : "list0", 
@@ -65,6 +67,11 @@ var map;
 var streetImage;
 var streetViewUrl = "http://maps.googleapis.com/maps/api/streetview?size=180x110&location=";
 
+//error handle
+function myError(){
+	alert("the map can't load");
+}
+
 
 function initialMap(){
 	//create a style array for map 
@@ -94,15 +101,16 @@ function initialMap(){
         });
 	
 	intialMarker();
-	setMarkers();	
-}
+	setMarkers(locations);
 
+}
 
 //initial marker in maps
 function intialMarker(){
 	var largeInfowindow = new google.maps.InfoWindow();
 	var defaultIcon = markerIcon('6699ff');
 	var clickIcon = markerIcon('ffccff');
+	
 	//create marker in locations, add listener in marker
 	for(var i = 0; i < locations.length; i ++){
 		var title = locations[i].title;
@@ -118,13 +126,33 @@ function intialMarker(){
 			animation: google.maps.Animation.DROP,
 			icon: defaultIcon
 		});	
-
+		
+		var news_title = $('#news-title');
 		locations[i].marker.addListener('click', (function(infoContent){
 			return function(){
 				//when marker clicked, reset the mapcenter
 				map.setCenter(this.getPosition());
 				map.setZoom(18);
 				populateInfoWindows(this, infoContent, largeInfowindow);
+				
+				
+				//set the different ny times info
+				var NYurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=";
+				var newsTitle = this.getTitle();
+				var NYurltemp = NYurl + newsTitle + "&sort=newest&api-key=7957786d5eb847f59f059f812fca919a";
+				
+				$.getJSON(NYurltemp, function(data){
+					news_title.text('the latest news of ' + newsTitle);
+					var articles;
+					articles = data.response.docs;
+					var newsList = $('#newsList');
+					newsList.text('');
+					for(var t = 0; t < articles.length; t ++){
+						newsList.append('<li class="list-group-item news-articles">' + '<a href="' + articles[t].web_url + '">' + articles[t].headline.main + '</a>' + '</li>');
+					}
+				}).fail(function() {
+					alert("can't load New York Times API, please try later");
+				});
 			};		
 		})(content));
 		
@@ -134,6 +162,7 @@ function intialMarker(){
 			return function(){
 				resetMap();
 				largeInfowindow.close(map, markerr);
+				news_title.text('the latest news of New York Museums');
 			};
 		})(locations[i].marker));
 		
@@ -143,21 +172,23 @@ function intialMarker(){
 		});
 		
 		//event listener to list click
-		var clickList = $('#list' + i);
+		/*var clickList = $('#list' + i);
         clickList.on('click', (function(markerd, contents) {
           return function() {
-			console.log(markerd);
-			//locations[x].status = true;
 			populateInfoWindows(markerd, contents, largeInfowindow);
 			markerd.setIcon(clickIcon);
 			map.setCenter(markerd.getPosition());
             map.setZoom(16);
           }; 
-        })(locations[i].marker, content));
+        })(locations[i].marker, content));*/
+		
+		
 	}
 }
 
-var setMarkers = function(){
+
+
+var setMarkers = function(locations){
 	var defaultIcon = markerIcon('6699ff');
 	for(var j = 0; j < locations.length; j ++){
 		if(locations[j].status === true){
@@ -191,10 +222,6 @@ function markerIcon(color){
     new google.maps.Size(21,34));
     return markerImage; 
 }
-//when the map has laod error, start function
-function mapError(){
-	alert("the map can't be load");
-}
 
 //reset button function
 var resetMap = function(){
@@ -204,7 +231,7 @@ var resetMap = function(){
 		locations[t].status = true;
 	}
 	
-	setMarkers();
+	setMarkers(locations);
 };
 
 
@@ -227,31 +254,104 @@ var newyorkTimes = function(data){
 };
 
 //view Model set for filter, list and New York times
+//var  name = 'New York museum';
 var ViewModel = function(){
 	var self = this;
 
 	this.searchInput = ko.observable('');
-	
+
 	this.markerLocation = ko.observableArray([]);
 	locations.forEach(function(location){
 		self.markerLocation.push(new locationDetail(location));
 	});
+
+	
+	//event listener to list click
+	this.displayMarker = function(marker){
+		for(var x = 0; x < locations.length; x ++){
+			locations[x].status = false;
+			locations[x].marker.setIcon(markerIcon('6699ff'));
+		}
+		if (marker.title.Vb == 3){
+			locations[0].status = true;
+			self.name = locations[0].title;
+		}else if(marker.title.Vb == 6){
+			locations[1].status = true;
+			self.name = locations[1].title;	
+		}else if(marker.title.Vb == 9){
+			locations[2].status = true;
+			self.name = locations[2].title;	
+		}else if(marker.title.Vb == 12){
+			locations[3].status = true;
+			self.name = locations[3].title;	
+		}else if(marker.title.Vb == 15){
+			locations[4].status = true;
+			self.name = locations[4].title;	
+		}else if(marker.title.Vb == 18){
+			locations[5].status = true;
+			self.name = locations[5].title;	
+		}
+
+		self.newsTitle = ko.observable("the latest news of " + self.name);
+		self.NYurltemp = self.NYurl + self.name + "&sort=newest&api-key=7957786d5eb847f59f059f812fca919a";
+		
+		$.getJSON(self.NYurltemp, function(data){
+			self.newsTitle = ko.observable("the latest news of " + self.name);
+			var articles;
+			articles = data.response.docs;
+			self.nytimesNews.removeAll();
+			articles.forEach(function(article){
+			self.nytimesNews.push(new newyorkTimes(article));
+		});
+		}).fail(function() {
+			alert("can't load New York Times API, please try later");
+		});
+		
+		setMarkers(locations);
+		for(var y = 0; y < locations.length; y ++){
+			locations[y].marker.setIcon(markerIcon('ffccff'));
+
+		}
+	};	
 	
 	// set ny times api
 	this.nytimesNews = ko.observableArray([]);
+	this.name = "New York museum";
+	this.newsTitle = ko.observable("the latest news of " + self.name);
+	this.NYurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=";
+	this.NYurltemp = self.NYurl + self.name + "&sort=newest&api-key=7957786d5eb847f59f059f812fca919a";
+
 	this.loadNews = ko.dependentObservable(function(){
-		var NYurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=";
-		var NYurltemp = NYurl + "New York Museum" + "&sort=newest&api-key=7957786d5eb847f59f059f812fca919a";
-		$.getJSON(NYurltemp, function(data){
+		$.getJSON(self.NYurltemp, function(data){
 			var articles;
 			articles = data.response.docs;
+			self.nytimesNews.removeAll();
 			articles.forEach(function(article){
 			self.nytimesNews.push(new newyorkTimes(article));
-			});
+		});
+		}).fail(function() {
+			alert("can't load New York Times API, please try later");
 		});	
 	});
 	
+	//reset the news
+	this.resetNews = function(){
+		self.name = "New York museum";
+		self.newsTitle = "the latest news of " + self.name;
+		self.NYurltemp = self.NYurl + self.name + "&sort=newest&api-key=7957786d5eb847f59f059f812fca919a";
+		$.getJSON(self.NYurltemp, function(data){
+			var articles;
+			articles = data.response.docs;
+			self.nytimesNews.removeAll();
+			articles.forEach(function(article){
+			self.nytimesNews.push(new newyorkTimes(article));
+		});
+		}).fail(function() {
+			alert("can't load New York Times API, please try later");
+		});
+	};
 	
+	//filter the list result
 	this.locations = ko.dependentObservable(function(){
 		var search = self.searchInput().toLowerCase();
 		return ko.utils.arrayFilter(locations, function(loc) {
@@ -260,7 +360,7 @@ var ViewModel = function(){
 				return loc.visible(true);
 			} else {
 				loc.status = false;
-				setMarkers();
+				setMarkers(locations);
 				return loc.visible(false);
 			}
 			
@@ -269,10 +369,9 @@ var ViewModel = function(){
 	});
 };
 
-$("#search").keyup(function() {
-	setMarkers();
-});
-
+function setLocation(){
+	setMarkers(locations);
+}
 
 ko.applyBindings(new ViewModel());
 
