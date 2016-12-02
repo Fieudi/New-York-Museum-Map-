@@ -105,12 +105,12 @@ function initialMap(){
 
 }
 
+
 //initial marker in maps
 function intialMarker(){
-	var largeInfowindow = new google.maps.InfoWindow();
 	var defaultIcon = markerIcon('6699ff');
 	var clickIcon = markerIcon('ffccff');
-	
+	var largeInfowindow = new google.maps.InfoWindow();
 	//create marker in locations, add listener in marker
 	for(var i = 0; i < locations.length; i ++){
 		var title = locations[i].title;
@@ -137,22 +137,8 @@ function intialMarker(){
 				
 				
 				//set the different ny times info
-				var NYurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=";
 				var newsTitle = this.getTitle();
-				var NYurltemp = NYurl + newsTitle + "&sort=newest&api-key=7957786d5eb847f59f059f812fca919a";
-				
-				$.getJSON(NYurltemp, function(data){
-					news_title.text('the latest news of ' + newsTitle);
-					var articles;
-					articles = data.response.docs;
-					var newsList = $('#newsList');
-					newsList.text('');
-					for(var t = 0; t < articles.length; t ++){
-						newsList.append('<li class="list-group-item news-articles">' + '<a href="' + articles[t].web_url + '">' + articles[t].headline.main + '</a>' + '</li>');
-					}
-				}).fail(function() {
-					alert("can't load New York Times API, please try later");
-				});
+				setNewsList(newsTitle);
 			};		
 		})(content));
 		
@@ -186,7 +172,24 @@ function intialMarker(){
 	}
 }
 
+function setNewsList(newsTitle){
+	var NYurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=";
+	var NYurltemp = NYurl + newsTitle + "&sort=newest&api-key=7957786d5eb847f59f059f812fca919a";
+				
+	$.getJSON(NYurltemp, function(data){
+		//news_title.text('the latest news of ' + newsTitle);
+		var articles;
+		articles = data.response.docs;
+		var newsList = $('#newsList');
+		newsList.text('');
+		for(var t = 0; t < articles.length; t ++){
+			newsList.append('<li class="list-group-item news-articles">' + '<a href="' + articles[t].web_url + '">' + articles[t].headline.main + '</a>' + '</li>');
+		}
+	}).fail(function() {
+		alert("can't load New York Times API, please try later");
+	});
 
+}
 
 var setMarkers = function(locations){
 	var defaultIcon = markerIcon('6699ff');

@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
 <body>
-    <div id="searchcontains" class="container-fluid">
+    <aside id="searchcontains" class="container-fluid">
 		<div id="search-bar" class="row">
 			<div id="search-group" class="input-group">
 				<input id="search" class="form-control" data-bind="textInput: searchInput, valueUpdate: 'keydown', event: {'keyup': setLocation}"  placeholder="search here" type="text">
@@ -20,22 +20,22 @@
 		<div class="list-group" id="list-place" data-bind="foreach: markerLocation">
 			<button type="button" class="list-group-item list" data-bind="text: $data.title, visible: visible, attr:{id: $data.id}, click: $parent.displayMarker"></button>
 		</div>
-		<button class="btn btn-info" id="reset-button" type="button" data-bind="click: resetNews">reset map</button>
+		<button class="btn btn-info" id="reset-button" type="button" data-bind="click: reset">reset map</button>
 		<hr id="separate-line">
 		<div id="NY-time" class="list-group" >
 			<div id="news-title"  data-bind="text: newsTitle"></div>
 			<div id="newsList" data-bind="foreach: nytimesNews">
-				<a href="" class="list-group-item news-articles" data-bind="text:$data.headline, attr:{href: $data.newsURL}"></a>
+				<a href="" class="list-group-item news-articles" target="_blank" data-bind="text:$data.headline, attr:{href: $data.newsURL}"></a>
 			</div>
 		</div>
-	</div>
+	</aside>
 	<!--map area-->
-	<div id="map">
-	</div>
+	<main id="map">
+	</main>
 	
     <script src="javascript/lib/knockout-3.2.0.js"></script>
 	<script src="javascript/jquery-3.1.0.min.js"></script>
-	<script src="javascript/apps.js"></script>
+	<script src="javascript/app.js"></script>
 	<script async defer
         src="https://maps.googleapis.com/maps/api/js?Libraries=places,geometry&key=AIzaSyDodOjM1OH3YdAKiUcKdyft1_r6yOSorRI&v=3&callback=initialMap" type="text/javascript" onerror="myError()">
     </script>
