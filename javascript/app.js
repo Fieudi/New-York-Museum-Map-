@@ -318,6 +318,7 @@ function setLocation(){
 
 //parse weather data 
 var weatherUrl = "http://api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/NY/NewYork.json";
+
 $.getJSON(weatherUrl, function(data){
 	var list = $('#weatherInfor');
 	var weatherInfor = data.current_observation;
@@ -328,6 +329,8 @@ $.getJSON(weatherUrl, function(data){
 	$('#weather').append('<p style="text-align: center;">Sorry! Weather Underground</p><p style="text-align: center;">Could Not Be Loaded</p>');
 })
 
+
+//set the weather part animation
 var weatherContainer = $('.weatherContainer');
 var weatherVisible = false;
 weatherContainer.on('click', function(){

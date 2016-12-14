@@ -32,12 +32,10 @@
 	</aside>
 	<!--weather information-->
 	<div class="weatherContainer">
-		<div>
-			<img id="weatherimage" src="image/weather-underground.png"/>
-			<div class="weather">
-				<h3>New York Weather Forecast</h3>
-				<div id="weatherInfor">
-				</div>
+		<img id="weatherimage" src="image/weather-underground.png"/>
+		<div class="weather">
+			<h3>New York Weather Forecast</h3>
+			<div id="weatherInfor">
 			</div>
 		</div>
 	</div>
@@ -45,8 +43,8 @@
 	<main id="map">
 	</main>
 	
-    <script src="javascript/lib/knockout-3.2.0.js"></script>
 	<script src="javascript/jquery-3.1.0.min.js"></script>
+    <script src="javascript/lib/knockout-3.2.0.js"></script>
 	<script src="javascript/app.js"></script>
 	<script async defer
         src="https://maps.googleapis.com/maps/api/js?Libraries=places,geometry&key=AIzaSyDodOjM1OH3YdAKiUcKdyft1_r6yOSorRI&v=3&callback=initialMap" type="text/javascript" onerror="myError()">
