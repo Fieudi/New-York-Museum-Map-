@@ -316,4 +316,17 @@ function setLocation(){
 	setMarkers(locations);
 }
 
+//parse weather data 
+var weatherUrl = "http://api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/NY/NewYork.json";
+$.getJSON(weatherUrl, function(data){
+	var list = $('#weatherInfor');
+	var weatherInfor = data.current_observation;
+	list.append('<li>Time:' + weatherInfor.observation_time + '</li>'); 
+	list.append('<li>Weahter:' + weatherInfor.temperature_string + '° F</li>');
+	list.append('<li><img style="width: 25px" src="' + weatherInfor.icon_url + '">  ' + weatherInfor.icon + '</li>');
+}).fail(function(e){
+	$('#weather').append('<p>sorry the weather cant be load</p>');
+})
+
+
 ko.applyBindings(ViewModel);
