@@ -317,8 +317,7 @@ function setLocation(){
 }
 
 //parse weather data 
-var weatherUrl = "http://api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/DC/Washington.json";
-//"http://api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/NY/NewYork.json";
+var weatherUrl = "http://api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/NY/NewYork.json";
 $.getJSON(weatherUrl, function(data){
 	var list = $('#weatherInfor');
 	var weatherInfor = data.current_observation;
