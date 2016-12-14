@@ -332,10 +332,17 @@ var weatherContainer = $('.weatherContainer');
 var weatherVisible = false;
 weatherContainer.on('click', function(){
 	if(weatherVisible === false){
-		$('.weatherInfor li').css("display", "block");
-		weatherContainer.animate({
-			width: "380"
-		}, 500);
+		if($(window).width() < 670) {
+            $(".forecast li").css("display", "block");
+            weatherContainer.animate({
+                width: "245"
+            }, 500);
+        } else {
+            $(".forecast li").css("display", "inline-block");
+            weatherContainer.animate({
+                width: "380"
+            }, 500);
+        }
 		weatherVisible = true;
 	} else {
 		weatherContainer.animate({
