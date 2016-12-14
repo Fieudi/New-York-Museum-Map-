@@ -59,6 +59,16 @@ body {
 	margin-left: -20px;
 }
 
+.weatherContainer{
+	position: absolute;
+	z-index: 2;
+	width: 80px;
+	height: 60px;
+	right: 40px;
+	bottom: 60px;
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
 @media screen and (max-width: 700px){
 	#searchcontains{
 		width: 200px;
