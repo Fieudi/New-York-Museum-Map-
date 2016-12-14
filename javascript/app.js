@@ -322,7 +322,7 @@ $.getJSON(weatherUrl, function(data){
 	var list = $('#weatherInfor');
 	var weatherInfor = data.current_observation;
 	list.append('<li>' + weatherInfor.observation_time + '</li>'); 
-	list.append('<li>Weahter:' + weatherInfor.temperature_string + '° F</li>');
+	list.append('<li>Weahter : ' + weatherInfor.temperature_string + ' ° F</li>');
 	list.append('<li><img style="width: 25px" src="' + weatherInfor.icon_url + '">  ' + weatherInfor.icon + '</li>');
 }).fail(function(e){
 	$('#weather').append('<p style="text-align: center;">Sorry! Weather Underground</p><p style="text-align: center;">Could Not Be Loaded</p>');
@@ -333,12 +333,10 @@ var weatherVisible = false;
 weatherContainer.on('click', function(){
 	if(weatherVisible === false){
 		if($(window).width() < 670) {
-            $(".weather li").css("display", "block");
             weatherContainer.animate({
                 width: "245"
             }, 500);
         } else {
-            $(".weather li").css("display", "block");
             weatherContainer.animate({
                 width: "400"
             }, 500);
