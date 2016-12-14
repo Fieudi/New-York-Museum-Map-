@@ -66,7 +66,7 @@ body {
     background-color: rgba(255, 255, 255, 0.8);
     width: 80px;
     height: 90px;
-    padding-top: 5px;
+    padding-top: 3px;
     right: 0;
 	bottom: 20%;
     border-radius: 10px;
@@ -75,8 +75,9 @@ body {
 
 #weatherimage{
 	display: inline-block;
-	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-top: 16px;
+	margin-bottom: 17px;
+	margin-right: 10px;
 }
 
 .weather{
@@ -89,12 +90,13 @@ body {
 .weather h3{
 	display: block;
 	margin: auto;
-	font-size: 20px;
-	color: grey;
+	font-size: 22px;
+	color: #ff9933;
 }
-.weather li{
+#weatherInfor div{
+	color: #0099ff;
 	display: block;
-	font-size: 14px;
+	font-size: 15px;
 }
 
 @media screen and (max-width: 700px){

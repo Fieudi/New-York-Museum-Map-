@@ -321,9 +321,9 @@ var weatherUrl = "http://api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/
 $.getJSON(weatherUrl, function(data){
 	var list = $('#weatherInfor');
 	var weatherInfor = data.current_observation;
-	list.append('<li>' + weatherInfor.observation_time + '</li>'); 
-	list.append('<li>Weahter : ' + weatherInfor.temperature_string + ' ° F</li>');
-	list.append('<li><img style="width: 25px" src="' + weatherInfor.icon_url + '">  ' + weatherInfor.icon + '</li>');
+	list.append('<div>' + weatherInfor.observation_time + '</div>'); 
+	list.append('<div>Weahter : ' + weatherInfor.temperature_string + ' ° F</div>');
+	list.append('<div><img style="width: 24px" src="' + weatherInfor.icon_url + '">  ' + weatherInfor.icon + '</div>');
 }).fail(function(e){
 	$('#weather').append('<p style="text-align: center;">Sorry! Weather Underground</p><p style="text-align: center;">Could Not Be Loaded</p>');
 })
