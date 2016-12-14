@@ -328,5 +328,22 @@ $.getJSON(weatherUrl, function(data){
 	$('#weather').append('<p style="text-align: center;">Sorry! Weather Underground</p><p style="text-align: center;">Could Not Be Loaded</p>');
 })
 
+var weatherContainer = $('.weatherContainer');
+var weatherVisible = false;
+weatherContainer.on('click', function(){
+	if(weatherVisible === false){
+		$('.weatherInfor li').css("display", "block");
+		weatherContainer.animate({
+			width: "380"
+		}, 500);
+		weatherVisible = true;
+	} else {
+		weatherContainer.animate({
+			width: "80"
+		}, 500);
+		weatherVisible = false;
+	}
+});
+
 
 ko.applyBindings(ViewModel);
