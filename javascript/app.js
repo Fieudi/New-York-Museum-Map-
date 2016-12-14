@@ -317,13 +317,13 @@ function setLocation(){
 }
 
 //parse weather data 
-var weatherUrl = "http://api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/NY/NewYork.json";
+var weatherUrl = "api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/NY/NewYork.json";
 $.getJSON(weatherUrl, function(data){
 	var list = $('#weatherInfor');
 	var weatherInfor = data.current_observation;
-	list.append('<div>' + weatherInfor.observation_time + '</div>'); 
-	list.append('<div>Weahter : ' + weatherInfor.temperature_string + ' ° F</div>');
-	list.append('<div><img style="width: 24px" src="' + weatherInfor.icon_url + '">  ' + weatherInfor.icon + '</div>');
+	list.appendChild('<div>' + weatherInfor.observation_time + '</div>'); 
+	list.appendChild('<div>Weahter : ' + weatherInfor.temperature_string + ' ° F</div>');
+	list.appendChild('<div><img style="width: 24px" src="' + weatherInfor.icon_url + '">  ' + weatherInfor.icon + '</div>');
 }).fail(function(e){
 	$('#weather').append('<p style="text-align: center;">Sorry! Weather Underground</p><p style="text-align: center;">Could Not Be Loaded</p>');
 })
