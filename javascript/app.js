@@ -321,7 +321,7 @@ var weatherUrl = "http://api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/
 $.getJSON(weatherUrl, function(data){
 	var list = $('#weatherInfor');
 	var weatherInfor = data.current_observation;
-	list.append('<li>Time:' + weatherInfor.observation_time + '</li>'); 
+	list.append('<li>' + weatherInfor.observation_time + '</li>'); 
 	list.append('<li>Weahter:' + weatherInfor.temperature_string + '° F</li>');
 	list.append('<li><img style="width: 25px" src="' + weatherInfor.icon_url + '">  ' + weatherInfor.icon + '</li>');
 }).fail(function(e){
@@ -333,14 +333,14 @@ var weatherVisible = false;
 weatherContainer.on('click', function(){
 	if(weatherVisible === false){
 		if($(window).width() < 670) {
-            $(".forecast li").css("display", "block");
+            $(".weather li").css("display", "block");
             weatherContainer.animate({
                 width: "245"
             }, 500);
         } else {
-            $(".forecast li").css("display", "inline-block");
+            $(".weather li").css("display", "block");
             weatherContainer.animate({
-                width: "380"
+                width: "400"
             }, 500);
         }
 		weatherVisible = true;

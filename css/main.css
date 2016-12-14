@@ -61,20 +61,40 @@ body {
 
 .weatherContainer{
 	position: absolute;
-	display: block;
-	z-index: 2;
-	padding-top: 10px;
-	width: 80px;
-	height: 80px;
-	right: 0;
-	bottom: 130px;
-	border-radius: 10px;
-	background-color: rgba(255, 255, 255, 0.8);
-	overflow: hidden;
+    z-index: 2;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 80px;
+    height: 80px;
+    padding-top: 5px;
+    right: 0;
+	bottom: 20%;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
+#weatherimage{
+	display: inline-block;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
 
+.weather{
+	display: inline-block;
+	vertical-align: top;
+	font-family: 'Mirza', cursive;
+	vertical-align: top;
+}
 
+.weather h3{
+	display: block;
+	margin: auto;
+	font-size: 20px;
+	color: grey;
+}
+.weather li{
+	font-size: 14px;
+}
 
 @media screen and (max-width: 700px){
 	#searchcontains{
