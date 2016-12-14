@@ -318,9 +318,8 @@ function setLocation(){
 
 //parse weather data 
 var weatherUrl = "http://api.wunderground.com/api/8b2bf4a9a6f86794/conditions/q/NY/NewYork.json";
-
+var list = $('#weatherInfor');
 $.getJSON(weatherUrl, function(data){
-	var list = $('#weatherInfor');
 	var weatherInfor = data.current_observation;
 	list.append('<div>' + weatherInfor.observation_time + '</div>'); 
 	list.append('<div>Weahter : ' + weatherInfor.temperature_string + ' ° F</div>');
